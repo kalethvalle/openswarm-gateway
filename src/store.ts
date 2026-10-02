@@ -42,7 +42,7 @@ export class RunStore {
     this.db.pragma('busy_timeout = 5000');
     this.db.transaction(() => {
       const version = this.db.pragma('user_version', { simple: true }) as number;
-      if (version > 1) throw new Error('Database schema is newer than this application.');
+      if (version > 2) throw new Error('Database schema is newer than this application.');
       if (version === 0) {
         this.db.exec(`
           CREATE TABLE runs (id TEXT PRIMARY KEY, state TEXT NOT NULL, status TEXT NOT NULL, updated_at INTEGER NOT NULL);
@@ -53,10 +53,20 @@ export class RunStore {
           PRAGMA user_version = 1;
         `);
       }
+      if (version < 2) {
+        this.db.exec(`
+          CREATE TABLE quota_reservations (id TEXT NOT NULL, scope TEXT NOT NULL, created INTEGER NOT NULL, requests INTEGER NOT NULL, tokens INTEGER NOT NULL, PRIMARY KEY(id, scope));
+          CREATE INDEX quota_window ON quota_reservations(scope, created);
+          CREATE TABLE quota_blocks (scope TEXT PRIMARY KEY, until_ms INTEGER NOT NULL);
+          CREATE TABLE quota_hints (scope TEXT NOT NULL, dimension TEXT NOT NULL, remaining INTEGER NOT NULL, until_ms INTEGER NOT NULL, PRIMARY KEY(scope, dimension));
+          PRAGMA user_version = 2;
+        `);
+      }
       this.db.prepare("UPDATE runs SET status = 'interrupted' WHERE status = 'running'").run();
       this.db.prepare("UPDATE requests SET status = 'interrupted' WHERE status = 'running'").run();
     })();
   }
+  quotaDatabase() { return this.db; }
   ready(): boolean { try { this.db.prepare('SELECT 1').get(); return true; } catch { return false; } }
   close() { this.db.close(); }
   cleanup(now = Date.now()) { this.db.prepare('DELETE FROM runs WHERE updated_at < ? AND status != ?').run(now - this.ttlMs, 'running'); }
@@ -124,7 +134,13 @@ export class RunStore {
       if (stable(comparableHistory(prefix)) !== stable(comparableHistory(state.expectedMessages)) || stable(request.tools) !== stable(state.tools)) throw new GatewayError(409, 'conversation_mismatch', 'Continuation must preserve the conversation and tool definitions.');
       for (const result of trailing) {
         const mapping = state.pending!.find(p => p.publicId === result.tool_call_id)!;
-        state.agentMessages!.push({ ...result, tool_call_id: mapping.providerId });
+        const normalizedResult = { ...result, tool_call_id: mapping.providerId };
+        state.agentMessages!.push(normalizedResult);
+        if (state.engineVersion === 2 && state.collaboration) {
+          const frame = state.collaboration.frames.at(-1)!;
+          frame.messages = state.agentMessages!;
+          state.collaboration.artifacts.push({ id: `a${state.collaboration.artifacts.length}`, kind: 'tool_result', content: result.content ?? '', source: mapping.publicId, role: 'tool' });
+        }
       }
       state.expectedMessages = request.messages;
       state.pending = undefined;

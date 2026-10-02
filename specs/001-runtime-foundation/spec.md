@@ -1,7 +1,7 @@
 ---
 id: SPEC-001
 revision: 1
-status: in_progress
+status: validated
 depends_on: []
 tests: [test/runtime.test.ts]
 ---

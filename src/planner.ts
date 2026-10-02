@@ -4,14 +4,6 @@ import { ModelRunner, UsageAccumulator } from './runner.js';
 import { LayaRouter } from './laya.js';
 import type { ChatRequest, Message, Plan, ProviderInput } from './types.js';
 
-export function isGreeting(request: ChatRequest): boolean {
-  if (request.tool_choice && request.tool_choice !== 'auto' && request.tool_choice !== 'none') return false;
-  const last = request.messages.at(-1);
-  if (last?.role !== 'user' || typeof last.content !== 'string') return false;
-  const text = last.content.replace(/^\[[^\]\n]{1,80}\]\s*/, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[¿?¡!.,]/g, ' ').replace(/\s+/g, ' ').trim();
-  return /^(?:(?:hola|hello|hi|buenos dias|buenas tardes|buenas noches)(?: (?:que puedes hacer|que puedo hacer contigo|en que puedes ayudarme))?|que puedes hacer|que puedo hacer contigo|en que puedes ayudarme)$/.test(text);
-}
-
 const planSchema = z.object({
   intent: z.string().min(1).max(2000),
   steps: z.array(z.object({
@@ -39,10 +31,6 @@ export class Planner {
     const eligible = config.models.filter(m => this.runner.supports(m.id, stageOptions(request, config.limits.maxOutputTokens)));
     if (!eligible.length) throw new GatewayError(400, 'unsupported_parameters', 'No configured model supports this request.');
     signal.throwIfAborted();
-    if (isGreeting(request)) {
-      const model = eligible.find(m => m.id === config.laya.generalModel) ?? eligible.find(m => m.specialties.includes('general')) ?? eligible[0]!;
-      return { intent: 'Direct greeting', steps: [{ role: 'assistant', objective: 'Respond to the greeting or capabilities question.', instructions: 'Answer briefly in the user language, respecting the original instructions and conversation. Describe only capabilities actually available. Use tools only when required by the original instructions.', model: model.id, output: 'final' }] };
-    }
     const local = await this.laya?.select(request, runId, signal);
     if (local && local.steps.length <= config.limits.maxAgents && local.steps.every(step => eligible.some(model => model.id === step.model))) return local;
     const format: ProviderInput['response_format'] = { type: 'json_schema', json_schema: { name: 'swarm_plan', strict: true, schema: {

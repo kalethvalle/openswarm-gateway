@@ -89,3 +89,10 @@ test('network interruptions while reading a response remain retryable', async ()
     await assert.rejects(provider.complete({ ...input, stream }, new AbortController().signal), (e: unknown) => e instanceof GatewayError && e.code === 'provider_connection_error' && e.retryable);
   }
 });
+
+test('OpenRouter rate limits distinguish platform daily quotas from upstream model capacity', async () => {
+  for (const [message, scope] of [['Rate limit exceeded: free-models-per-day', 'provider'], ['Provider returned error: upstream overloaded', 'model']]) {
+    const adapter = new OpenRouterAdapter('key', 'http://mock', async () => Response.json({ error: { code: 429, message } }, { status: 429 }));
+    await assert.rejects(adapter.complete(input, new AbortController().signal), (e: any) => e.rateLimitScope === scope && !e.message.includes('free-models-per-day'));
+  }
+});

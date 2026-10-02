@@ -1,3 +1,5 @@
+> Informe histórico del prototipo v0.1. Los límites y resultados aquí descritos no validan v0.2; consulta v0.2-validation.md.
+
 # Validación de Laya + Groq + OpenClaw
 
 Pruebas realizadas el 1 de octubre de 2026 (America/Bogota).

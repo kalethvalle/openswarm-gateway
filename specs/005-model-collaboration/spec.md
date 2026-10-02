@@ -1,7 +1,7 @@
 ---
 id: SPEC-005
 revision: 1
-status: in_progress
+status: validated
 depends_on: [SPEC-003, SPEC-004]
 tests: [test/collaboration.test.ts]
 ---

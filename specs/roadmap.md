@@ -9,3 +9,11 @@
 - SPEC-007: [Evaluación y distribución MIT](007-evaluation-and-release/spec.md).
 
 Orden: 001 → 002 → 003 → 004 → 005 → 006 → 007. Estado actual en cada spec.md.
+
+## Estado al 2026-10-02
+
+- 001–005: contratos validados con pruebas offline; calidad de Laya pendiente de calibración.
+- 006: implementación y SDK real comprobados; OpenClaw habitual bloqueado por cuotas.
+- 007: evaluación de Laya, piloto de código y Docker ejecutados; comparación completa pendiente.
+
+Métricas y siguientes pasos en [validación v0.2](../docs/v0.2-validation.md). Los pendientes permanecen en los archivos tasks.md de cada especificación.

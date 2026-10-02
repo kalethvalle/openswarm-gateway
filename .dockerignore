@@ -6,3 +6,7 @@ data
 config.yaml
 .git
 test
+
+.env.*
+*.sqlite*
+config.*.backup.yaml

@@ -2,6 +2,10 @@ import { createParser } from 'eventsource-parser';
 import { GatewayError } from './errors.js';
 import type { Message, ModelInfo, ProviderAdapter, ProviderInput, ProviderResult, ToolCall, Usage, FinishReason } from './types.js';
 
+function rateHeaders(response: Response): Record<string, string> {
+  return Object.fromEntries([...response.headers].filter(([key]) => key.startsWith('x-ratelimit-') || key === 'retry-after'));
+}
+
 const MAX_RESPONSE_BYTES = 16 * 1024 * 1024;
 const finishes = new Set(['stop', 'length', 'tool_calls', 'content_filter']);
 function upstreamError(status: number, providerName: string) {
@@ -50,6 +54,7 @@ export abstract class ChatCompletionsAdapter implements ProviderAdapter {
       if (!response.ok) {
         const error = upstreamError(response.status, this.providerName);
         error.upstreamStatus = response.status;
+        error.rateHeaders = rateHeaders(response);
         const hint = response.headers.get('retry-after');
         if (hint) {
           const seconds = Number(hint);
@@ -60,6 +65,13 @@ export abstract class ChatCompletionsAdapter implements ProviderAdapter {
           const payload = await this.json(response, signal);
           const code = payload?.error?.code;
           if (typeof code === 'string' && /^[a-zA-Z0-9_.-]{1,80}$/.test(code)) error.upstreamCode = code;
+          if (response.status === 429) {
+            const message = typeof payload?.error?.message === 'string' ? payload.error.message : '';
+            // OpenRouter platform free quotas are shared; upstream capacity 429s
+            // are not proof that every model on the account is exhausted.
+            error.rateLimitScope = /free-models-per-(day|minute)|daily limit|account.*rate limit/i.test(message) ? 'provider' : 'model';
+            if (error.retryAfterSeconds === undefined && /free-models-per-day|daily limit/i.test(message)) error.retryAfterSeconds = 86400;
+          }
         } catch { /* Preserve the upstream status even if its error body is not JSON. */ }
         throw error;
       }
@@ -98,7 +110,7 @@ export abstract class ChatCompletionsAdapter implements ProviderAdapter {
       if (payload.error) throw upstreamError(Number(payload.error.code) || 502, this.providerName);
       const choice = payload.choices?.[0];
       if (!choice || !finishes.has(choice.finish_reason)) throw protocolError();
-      return { model: payload.model ?? input.model, message: normalizeMessage(choice.message), finishReason: choice.finish_reason, usage: this.responseUsage(payload) };
+      return { model: payload.model ?? input.model, message: normalizeMessage(choice.message), finishReason: choice.finish_reason, usage: this.responseUsage(payload), rateHeaders: rateHeaders(response) };
     }
     if (!response.body) throw protocolError();
     const reader = response.body.getReader();
@@ -156,7 +168,7 @@ export abstract class ChatCompletionsAdapter implements ProviderAdapter {
         await consume();
       }
       if (!done || !finishReason) throw protocolError();
-      return { model, finishReason, usage, message: normalizeMessage({
+      return { model, finishReason, usage, rateHeaders: rateHeaders(response), message: normalizeMessage({
         role: 'assistant', content: content || null,
         ...(calls.size ? { tool_calls: [...calls.entries()].sort(([a], [b]) => a - b).map(([, c]) => c) } : {}),
         ...(reasoning ? { reasoning } : {}), ...(details.size ? { reasoning_details: [...details.values()] } : {}),
@@ -177,7 +189,7 @@ export class OpenRouterAdapter extends ChatCompletionsAdapter {
     const payload = await this.json(await this.request('/models', signal), signal);
     if (!Array.isArray(payload.data)) throw protocolError();
     return payload.data.filter((m: any) => typeof m.id === 'string' && Number.isInteger(m.context_length) && m.context_length > 0 && Array.isArray(m.supported_parameters))
-      .map((m: any) => ({ id: m.id, contextLength: m.context_length, supportedParameters: m.supported_parameters.filter((p: unknown) => typeof p === 'string') }));
+      .map((m: any) => ({ id: m.id, contextLength: m.context_length, supportedParameters: m.supported_parameters.filter((p: unknown) => typeof p === 'string'), ...(m.pricing ? { free: m.id.endsWith(':free') && ['prompt', 'completion'].every(k => typeof m.pricing[k] === 'string' && Number(m.pricing[k]) === 0) && Object.values(m.pricing).every(v => typeof v === 'string' && Number(v) === 0) } : {}) }));
   }
   protected requestBody(input: ProviderInput): unknown {
     return { ...input, provider: { require_parameters: true }, transforms: [], ...(input.stream ? { stream_options: { include_usage: true } } : {}) };

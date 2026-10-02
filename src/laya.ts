@@ -14,6 +14,39 @@ const resultSchema = z.object({
 export class LayaRouter {
   constructor(private config: Config['laya'], private log: Log = () => {}, private fetcher: typeof fetch = fetch) {}
 
+  async decide(state: string, questions: Record<string, { type: 'choice'; instructions: string; criteria: Record<string, string> }>, runId: string, signal: AbortSignal): Promise<Record<string, string> | undefined> {
+    if (!this.config.enabled || state.length > this.config.maxInputChars) return;
+    const started = Date.now();
+    try {
+      const response = await this.fetcher(`${this.config.baseUrl.replace(/\/$/, '')}/v1/systemone`, {
+        method: 'POST', signal: AbortSignal.any([signal, AbortSignal.timeout(this.config.timeoutMs)]),
+        headers: { 'Content-Type': 'application/json', ...(process.env.LAYA_API_KEY ? { Authorization: `Bearer ${process.env.LAYA_API_KEY}` } : {}) },
+        body: JSON.stringify({ state, questions, model: 'multilingual', max_len: 8192, min_confidence: this.config.minConfidence }),
+      });
+      if (!response.ok || !response.body) { await response.body?.cancel(); return; }
+      const reader = response.body.getReader(); const parts: Uint8Array[] = []; let bytes = 0;
+      try { while (true) { const chunk = await reader.read(); if (chunk.done) break; bytes += chunk.value.byteLength; if (bytes > 65536) { await reader.cancel(); return; } parts.push(chunk.value); } } finally { reader.releaseLock(); }
+      const payload = JSON.parse(Buffer.concat(parts).toString('utf8'));
+      const parsed = z.object({
+        answers: z.record(z.object({ choice: z.string(), answer_confidence: z.number().min(0).max(1), probabilities: z.record(z.number().min(0).max(1)).optional(), low_confidence: z.boolean().optional(), abstention: z.string().optional() })),
+        usage: z.object({ truncated: z.boolean().optional(), state_tokens_dropped: z.number().optional(), truncated_questions: z.array(z.string()).optional() }).optional(),
+        routing: z.object({ model: z.string().optional(), repo: z.string().optional() }).passthrough().optional(),
+      }).parse(payload);
+      const truncated = Boolean(parsed.usage?.truncated || parsed.usage?.state_tokens_dropped || parsed.usage?.truncated_questions?.length);
+      const valid = !truncated && Object.entries(questions).every(([key, question]) => {
+        const answer = parsed.answers[key];
+        return answer && Object.hasOwn(question.criteria, answer.choice) && answer.answer_confidence >= this.config.minConfidence && !answer.low_confidence && (!answer.abstention || answer.abstention === 'passed');
+      });
+      const audit = Object.fromEntries(Object.entries(questions).map(([key, q]) => {
+        const a = parsed.answers[key];
+        return [key, a ? { choice: Object.hasOwn(q.criteria, a.choice) ? a.choice : 'invalid', answer_confidence: a.answer_confidence, probabilities: Object.fromEntries(Object.entries(a.probabilities ?? {}).filter(([option]) => Object.hasOwn(q.criteria, option))), abstained: Boolean(a.low_confidence || a.abstention && a.abstention !== 'passed') } : { missing: true }];
+      }));
+      this.log({ runId, source: 'laya', contractVersion: 2, checkpoint: 'multilingual', configuredRevision: process.env.LAYA_REVISION ?? 'reviewed', answers: audit, truncated, accepted: valid, durationMs: Date.now() - started }, 'Decision evaluated');
+      if (valid && this.config.mode === 'route') return Object.fromEntries(Object.keys(questions).map(key => [key, parsed.answers[key]!.choice]));
+    } catch (error) { if (signal.aborted) throw signal.reason; this.log({ runId, source: 'laya', reason: 'unavailable_or_invalid', durationMs: Date.now() - started }, 'Decision fallback'); }
+    return;
+  }
+
   async select(request: ChatRequest, runId: string, signal: AbortSignal): Promise<Plan | undefined> {
     if (!this.config.enabled) return;
     const started = Date.now();

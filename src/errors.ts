@@ -1,4 +1,6 @@
 export class GatewayError extends Error {
+  rateHeaders?: Record<string, string>;
+  rateLimitScope?: 'model' | 'provider';
   retryAfterSeconds?: number;
   upstreamStatus?: number;
   upstreamCode?: string;

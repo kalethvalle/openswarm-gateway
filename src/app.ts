@@ -9,6 +9,8 @@ import { RunStore } from './store.js';
 import type { Completion, ProviderAdapter } from './types.js';
 import { validateRequest } from './validation.js';
 import { LayaRouter } from './laya.js';
+import { CollaborationEngine } from './collaboration.js';
+import { QuotaLedger } from './quota.js';
 
 class SSEWriter {
   started = false;
@@ -64,7 +66,9 @@ export async function createApp(options: { config: Config; provider: ProviderAda
   if (!options.gatewayKey) throw new Error('GATEWAY_API_KEY is required.');
   const app = Fastify({ bodyLimit: config.limits.bodyLimitBytes, logger: options.logLevel === 'silent' ? false : { level: options.logLevel ?? 'info', redact: ['req.headers.authorization'] }, logController: new LogController({ disableRequestLogging: true }) });
   const catalog = await provider.catalog(AbortSignal.timeout(config.limits.modelTimeoutMs));
-  const runner = new ModelRunner(config, provider, catalog, (fields, message) => app.log.info(fields, message));
+  const log = (fields: Record<string, unknown>, message: string) => app.log.info(fields, message);
+  const quota = config.version === 2 ? new QuotaLedger(store.quotaDatabase(), config) : undefined;
+  const runner = new ModelRunner(config, provider, catalog, log, quota);
   const laya = options.laya ?? new LayaRouter({ ...config.laya, baseUrl: process.env.LAYA_BASE_URL ?? config.laya.baseUrl }, (fields, message) => app.log.info(fields, message));
   const orchestrator = new Orchestrator(runner, store, laya);
   const expectedKey = createHash('sha256').update(`Bearer ${options.gatewayKey}`).digest();
@@ -72,7 +76,7 @@ export async function createApp(options: { config: Config; provider: ProviderAda
   let closing = false;
   const cleanup = setInterval(() => { try { store.cleanup(); } catch { app.log.error('State cleanup failed'); } }, Math.min(config.limits.idleTtlMs, 60_000)).unref();
   app.addHook('preClose', async () => { closing = true; for (const controller of controllers) controller.abort(); });
-  app.addHook('onClose', async () => { clearInterval(cleanup); store.close(); });
+  app.addHook('onClose', async () => { clearInterval(cleanup); provider.close?.(); store.close(); });
   app.addHook('onRequest', async request => {
     if (!request.url.split('?')[0]?.startsWith('/v1/')) return;
     const supplied = createHash('sha256').update(request.headers.authorization ?? '').digest();
@@ -86,14 +90,21 @@ export async function createApp(options: { config: Config; provider: ProviderAda
   app.setNotFoundHandler((_request, reply) => reply.code(404).send(errorBody(new GatewayError(404, 'not_found', 'Endpoint not found.'))));
   app.get('/healthz', async () => ({ status: 'ok' }));
   app.get('/readyz', async (_request, reply) => {
-    const ready = !closing && store.ready();
+    const ready = !closing && store.ready() && (provider.availableModels?.() ?? catalog).length > 0;
     return reply.code(ready ? 200 : 503).send({ status: ready ? 'ready' : 'unavailable' });
   });
+  app.get('/v1/status', async () => ({ status: !closing && store.ready() ? 'running' : 'unavailable', ...(provider.health?.() ?? { availableModels: catalog.map(m => m.id) }) }));
   app.get('/v1/models', async () => ({ object: 'list', data: [{ id: 'openswarm-auto', object: 'model', created: 0, owned_by: 'openswarm' }] }));
   app.post('/v1/chat/completions', async (incoming, reply) => {
     if (closing) throw new GatewayError(503, 'shutting_down', 'Gateway is shutting down.');
     const request = validateRequest(incoming.body);
+    if (config.version === 2 && request.tools?.some(t => t.function.name.startsWith('__openswarm_'))) throw new GatewayError(400, 'reserved_tool_name', 'The __openswarm_ namespace is reserved for internal controls.');
     const prepared = orchestrator.prepare(request);
+    if ('state' in prepared && !prepared.state.plan && !prepared.state.runtime && !prepared.state.pending && prepared.state.toolRounds === 0) {
+      prepared.state.engineVersion = config.version;
+      prepared.state.runtime = config;
+      store.checkpoint(prepared.state);
+    }
     const identity = 'replay' in prepared ? prepared.replay : { id: `chatcmpl-${randomUUID()}`, created: Math.floor(Date.now() / 1000) };
     const controller = new AbortController();
     controllers.add(controller);
@@ -104,7 +115,17 @@ export async function createApp(options: { config: Config; provider: ProviderAda
     const writer = request.stream ? new SSEWriter(reply, identity, Boolean(request.stream_options?.include_usage), signal) : undefined;
     const heartbeat = writer ? setInterval(() => { void writer.heartbeat().catch(() => controller.abort()); }, 15_000).unref() : undefined;
     try {
-      const response = 'replay' in prepared ? prepared.replay : await orchestrator.execute(request, prepared, signal, identity, writer ? text => writer.text(text) : undefined);
+      let response: Completion;
+      if ('replay' in prepared) response = prepared.replay;
+      else {
+        const runtime = prepared.state.runtime ?? { ...config, version: 1 as const, models: config.models.filter(m => catalog.some(c => c.id === m.id)) };
+        const runtimeRunner = new ModelRunner(runtime, provider, catalog, log, runtime.version === 2 ? new QuotaLedger(store.quotaDatabase(), runtime) : undefined);
+        const runtimeLaya = new LayaRouter({ ...runtime.laya, baseUrl: process.env.LAYA_BASE_URL ?? runtime.laya.baseUrl }, log);
+        const engine = prepared.state.engineVersion === 2
+          ? new CollaborationEngine(runtimeRunner, store, options.laya ?? runtimeLaya)
+          : runtime === config ? orchestrator : new Orchestrator(runtimeRunner, store, options.laya ?? runtimeLaya);
+        response = await engine.execute(request, prepared, signal, identity, writer ? text => writer.text(text) : undefined);
+      }
       if (heartbeat) clearInterval(heartbeat);
       if (writer) { await writer.finish(response); return reply; }
       return reply.send(response);

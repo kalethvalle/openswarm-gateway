@@ -1,6 +1,6 @@
 {
   "name": "openswarm-gateway",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -15,7 +15,13 @@
     "start": "node dist/main.js",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.test.json",
     "test": "tsx --test test/*.test.ts",
-    "smoke": "tsx scripts/smoke.ts"
+    "smoke": "tsx scripts/smoke.ts",
+    "spec:check": "node scripts/spec-check.mjs",
+    "verify": "npm run spec:check && npm run typecheck && npm test && npm run build",
+    "eval:routing": "tsx scripts/routing-eval.ts",
+    "benchmark": "tsx scripts/benchmark.ts",
+    "smoke:normal": "node scripts/openclaw-normal.mjs",
+    "smoke:docker": "node scripts/docker-smoke.mjs"
   },
   "dependencies": {
     "ajv": "^8.20.0",
@@ -33,5 +39,6 @@
     "openai": "^6.0.0",
     "tsx": "^4.19.3",
     "typescript": "^5.7.3"
-  }
+  },
+  "license": "MIT"
 }

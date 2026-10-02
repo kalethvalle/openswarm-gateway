@@ -1,0 +1,162 @@
+[
+  {
+    "id": "development-general-01",
+    "split": "development",
+    "specialty": "general",
+    "direct": true,
+    "language": "es",
+    "prompt": "Hola, ¿en qué puedes ayudarme?"
+  },
+  {
+    "id": "development-general-02",
+    "split": "development",
+    "specialty": "general",
+    "direct": true,
+    "language": "es",
+    "prompt": "Explica qué significa HTTP."
+  },
+  {
+    "id": "development-general-03",
+    "split": "development",
+    "specialty": "general",
+    "direct": true,
+    "language": "en",
+    "prompt": "Hello, introduce your capabilities briefly."
+  },
+  {
+    "id": "development-general-04",
+    "split": "development",
+    "specialty": "general",
+    "direct": true,
+    "language": "en",
+    "prompt": "Summarize: tasks have a title and a status."
+  },
+  {
+    "id": "development-coding-01",
+    "split": "development",
+    "specialty": "coding",
+    "direct": false,
+    "language": "es",
+    "prompt": "Implementa una función para sumar números."
+  },
+  {
+    "id": "development-coding-02",
+    "split": "development",
+    "specialty": "coding",
+    "direct": false,
+    "language": "es",
+    "prompt": "Crea un endpoint para registrar tareas."
+  },
+  {
+    "id": "development-coding-03",
+    "split": "development",
+    "specialty": "coding",
+    "direct": false,
+    "language": "en",
+    "prompt": "Write a JavaScript function that reverses a string."
+  },
+  {
+    "id": "development-coding-04",
+    "split": "development",
+    "specialty": "coding",
+    "direct": false,
+    "language": "en",
+    "prompt": "Implement a CSV parser for two columns."
+  },
+  {
+    "id": "development-debugging-01",
+    "split": "development",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "es",
+    "prompt": "Corrige suma(a,b) que ahora devuelve a-b."
+  },
+  {
+    "id": "development-debugging-02",
+    "split": "development",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "es",
+    "prompt": "Mi endpoint retorna 500 al recibir title=null. Diagnostica el fallo."
+  },
+  {
+    "id": "development-debugging-03",
+    "split": "development",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "en",
+    "prompt": "Fix an off-by-one loop that skips the last item."
+  },
+  {
+    "id": "development-debugging-04",
+    "split": "development",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "en",
+    "prompt": "Investigate why this promise never resolves."
+  },
+  {
+    "id": "development-architecture-01",
+    "split": "development",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "es",
+    "prompt": "Diseña los componentes de una API de inventario."
+  },
+  {
+    "id": "development-architecture-02",
+    "split": "development",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "es",
+    "prompt": "Propón una arquitectura con colas y workers."
+  },
+  {
+    "id": "development-architecture-03",
+    "split": "development",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "en",
+    "prompt": "Design a service boundary for billing and orders."
+  },
+  {
+    "id": "development-architecture-04",
+    "split": "development",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "en",
+    "prompt": "Compare persistence designs for an offline application."
+  },
+  {
+    "id": "development-review-01",
+    "split": "development",
+    "specialty": "review",
+    "direct": false,
+    "language": "es",
+    "prompt": "Revisa este código sin modificarlo: return a/b."
+  },
+  {
+    "id": "development-review-02",
+    "split": "development",
+    "specialty": "review",
+    "direct": false,
+    "language": "es",
+    "prompt": "Audita las validaciones de este formulario."
+  },
+  {
+    "id": "development-review-03",
+    "split": "development",
+    "specialty": "review",
+    "direct": false,
+    "language": "en",
+    "prompt": "Review this patch for race conditions; do not implement changes."
+  },
+  {
+    "id": "development-review-04",
+    "split": "development",
+    "specialty": "review",
+    "direct": false,
+    "language": "en",
+    "prompt": "Assess this function for correctness and edge cases."
+  }
+]

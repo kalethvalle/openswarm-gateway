@@ -1,6 +1,6 @@
 # Tareas — SPEC-004
 
 - [x] Especificar comportamiento y aceptación.
-- [ ] Implementar contratos y comportamiento.
-- [ ] Añadir regresiones con IDs de requisitos.
-- [ ] Ejecutar pruebas y registrar evidencia.
+- [x] Implementar contratos y comportamiento.
+- [x] Añadir regresiones con IDs de requisitos.
+- [x] Ejecutar pruebas offline y registrar evidencia.

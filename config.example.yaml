@@ -1,34 +1,75 @@
-# Groq generation + local Laya routing (experimental, not calibrated).
+version: 2
+# provider is retained only to interpret historical v1 states.
 provider: groq
 plannerModel: openai/gpt-oss-20b
+providers:
+  groq:
+    type: groq
+    apiKeyEnv: GROQ_API_KEY
+    freeAccount: true # Operator must use a Groq Free account; catalog cannot verify billing tier.
+    priority: 10
+  openrouter:
+    type: openrouter
+    apiKeyEnv: OPENROUTER_API_KEY
+    priority: 20
+    quotas: {rpm: 20, rpd: 50} # Shared free-account cap; adjust to verified account limits.
+  local:
+    type: local
+    enabled: false
+    baseUrl: http://127.0.0.1:11434/v1
+    priority: 30
+catalogRefreshMs: 300000
+quotaGroups: {}
 models:
   - id: openai/gpt-oss-20b
-    minIntervalMs: 0
-    specialties: [planning, general, synthesis]
-    fallbacks: [openai/gpt-oss-120b]
+    provider: groq
+    remoteId: openai/gpt-oss-20b
+    specialties: [planning, general, architecture, coding, debugging]
+    quotas: {rpm: 30, rpd: 1000, tpm: 8000, tpd: 200000}
+    fallbacks: [cohere/north-mini-code:free, openai/gpt-oss-120b]
   - id: qwen/qwen3.8-27b
-    minIntervalMs: 0
+    provider: groq
+    remoteId: qwen/qwen3.8-27b
     specialties: [coding, debugging]
-    fallbacks: [openai/gpt-oss-20b]
+    quotas: {rpm: 30, rpd: 1000, tpm: 8000, tpd: 200000}
+    fallbacks: [cohere/north-mini-code:free, openai/gpt-oss-20b]
   - id: openai/gpt-oss-120b
-    minIntervalMs: 0
-    specialties: [review, architecture, reasoning]
+    provider: groq
+    remoteId: openai/gpt-oss-120b
+    specialties: [review, architecture, general]
+    quotas: {rpm: 30, rpd: 1000, tpm: 8000, tpd: 200000}
+    fallbacks: [nvidia/nemotron-3-super-120b-a12b:free]
+  - id: cohere/north-mini-code:free
+    provider: openrouter
+    remoteId: cohere/north-mini-code:free
+    specialties: [planning, general, coding, debugging]
     fallbacks: [openai/gpt-oss-20b]
+  - id: nvidia/nemotron-3-super-120b-a12b:free
+    provider: openrouter
+    remoteId: nvidia/nemotron-3-super-120b-a12b:free
+    specialties: [review, architecture, general]
+    fallbacks: [openai/gpt-oss-120b]
 laya:
   enabled: true
   mode: route
   baseUrl: http://127.0.0.1:8001
   timeoutMs: 5000
   minConfidence: 0.95
-  maxInputChars: 6000
+  maxInputChars: 24000
   generalModel: openai/gpt-oss-20b
   codeModel: qwen/qwen3.8-27b
   reviewModel: openai/gpt-oss-120b
+collaboration:
+  maxConsultations: 3
+  maxDepth: 2
+  maxDecisions: 12
+  packetTokens: 6000
+  maxQuotaWaitMs: 5000
 limits:
   maxAgents: 2
   maxToolRounds: 4
   maxModelCalls: 8
-  rateLimitRetries: 1
+  rateLimitRetries: 0
   maxRunTokens: 60000
   modelTimeoutMs: 120000
   requestTimeoutMs: 300000

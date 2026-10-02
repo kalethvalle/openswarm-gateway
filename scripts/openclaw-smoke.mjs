@@ -25,6 +25,7 @@ await writeFile(configPath, JSON.stringify({
   } } },
   agents: { defaults: { model: { primary: 'openswarm/openswarm-auto' }, models: { 'openswarm/openswarm-auto': {} }, timeoutSeconds: 360, compaction: { memoryFlush: { enabled: false } } } },
   tools: { profile: 'coding', allow: ['read', 'write', 'exec'], deny: ['apply_patch'], toolSearch: false, fs: { workspaceOnly: true } },
+  memory: { search: { enabled: false } },
   skills: { allowBundled: [] },
 }, null, 2) + '\n', { mode: 0o600 });
 const prompt = 'Implementa una función JavaScript exportada validarTitulo(value): true solo para strings con algún carácter no vacío. Crea tasks.mjs y tasks.test.mjs con node:test y cinco casos incluyendo null y espacios. Usa una sola llamada a exec para escribir ambos archivos y ejecutar node --test tasks.test.mjs. Después realiza una revisión independiente del código y reporta el resultado real. Trabaja solo en esta carpeta y no instales dependencias.';

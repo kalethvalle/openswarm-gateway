@@ -1,7 +1,7 @@
 ---
 id: SPEC-003
-revision: 1
-status: in_progress
+revision: 2
+status: validated
 depends_on: [SPEC-001, SPEC-002]
 tests: [test/quota.test.ts]
 ---
@@ -17,3 +17,7 @@ tests: [test/quota.test.ts]
 ## Alcance
 
 Instalación propia, una instancia, Node.js 22 y SQLite. Compatibilidad Chat Completions de texto/herramientas; sin aislamiento multiusuario ni API Responses.
+
+## Revisión 2
+
+Un 429 de capacidad de modelo no agota toda la cuenta; los errores de cuota compartida sí bloquean el proveedor. Sin metadatos concluyentes se mantiene el límite configurado de cuenta y cooldown del modelo.

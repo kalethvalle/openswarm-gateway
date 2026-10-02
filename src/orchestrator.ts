@@ -13,7 +13,7 @@ export class Orchestrator {
   constructor(private runner: ModelRunner, public store: RunStore, laya?: LayaRouter) { this.planner = new Planner(runner, laya); }
   prepare(request: ChatRequest): Prepared {
     compileTools(request.tools);
-    if (!this.runner.config.models.some(m => this.runner.supports(m.id, stageOptions(request, this.runner.config.limits.maxOutputTokens)))) throw new GatewayError(400, 'unsupported_parameters', 'No configured model supports the requested parameters.');
+    if (!this.runner.config.models.some(m => this.runner.supports(m.id, stageOptions(request, this.runner.config.limits.maxOutputTokens)))) throw new GatewayError(this.runner.config.version === 2 ? 503 : 400, this.runner.config.version === 2 ? 'model_unavailable' : 'unsupported_parameters', 'No available model supports the requested parameters.');
     return this.store.prepare(request);
   }
 

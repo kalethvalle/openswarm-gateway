@@ -1,0 +1,482 @@
+[
+  {
+    "id": "heldout-general-01",
+    "split": "heldout",
+    "specialty": "general",
+    "direct": true,
+    "language": "es",
+    "prompt": "Buenas noches."
+  },
+  {
+    "id": "heldout-general-02",
+    "split": "heldout",
+    "specialty": "general",
+    "direct": true,
+    "language": "es",
+    "prompt": "Gracias por la explicación."
+  },
+  {
+    "id": "heldout-general-03",
+    "split": "heldout",
+    "specialty": "general",
+    "direct": true,
+    "language": "es",
+    "prompt": "¿Qué diferencia hay entre PUT y PATCH? Solo explicación."
+  },
+  {
+    "id": "heldout-general-04",
+    "split": "heldout",
+    "specialty": "general",
+    "direct": true,
+    "language": "es",
+    "prompt": "Explícame en una frase qué es una variable."
+  },
+  {
+    "id": "heldout-general-05",
+    "split": "heldout",
+    "specialty": "general",
+    "direct": true,
+    "language": "es",
+    "prompt": "Resume este texto: los datos se guardan en memoria y se pierden al cerrar."
+  },
+  {
+    "id": "heldout-general-06",
+    "split": "heldout",
+    "specialty": "general",
+    "direct": true,
+    "language": "es",
+    "prompt": "Traduce al inglés: tarea completada."
+  },
+  {
+    "id": "heldout-general-07",
+    "split": "heldout",
+    "specialty": "general",
+    "direct": true,
+    "language": "es",
+    "prompt": "¿Qué significa el código 404?"
+  },
+  {
+    "id": "heldout-general-08",
+    "split": "heldout",
+    "specialty": "general",
+    "direct": true,
+    "language": "es",
+    "prompt": "Dame una definición breve de idempotencia."
+  },
+  {
+    "id": "heldout-general-09",
+    "split": "heldout",
+    "specialty": "general",
+    "direct": true,
+    "language": "en",
+    "prompt": "Good morning, what can you help with?"
+  },
+  {
+    "id": "heldout-general-10",
+    "split": "heldout",
+    "specialty": "general",
+    "direct": true,
+    "language": "en",
+    "prompt": "Explain a database index in plain words."
+  },
+  {
+    "id": "heldout-general-11",
+    "split": "heldout",
+    "specialty": "general",
+    "direct": true,
+    "language": "en",
+    "prompt": "Translate “request completed” into Spanish."
+  },
+  {
+    "id": "heldout-general-12",
+    "split": "heldout",
+    "specialty": "general",
+    "direct": true,
+    "language": "en",
+    "prompt": "Summarize this sentence: retries may duplicate a write."
+  },
+  {
+    "id": "heldout-coding-01",
+    "split": "heldout",
+    "specialty": "coding",
+    "direct": false,
+    "language": "es",
+    "prompt": "Escribe una función que quite duplicados conservando el orden."
+  },
+  {
+    "id": "heldout-coding-02",
+    "split": "heldout",
+    "specialty": "coding",
+    "direct": false,
+    "language": "es",
+    "prompt": "Implementa paginación por cursor en este endpoint."
+  },
+  {
+    "id": "heldout-coding-03",
+    "split": "heldout",
+    "specialty": "coding",
+    "direct": false,
+    "language": "es",
+    "prompt": "Crea un validador de UUID en TypeScript."
+  },
+  {
+    "id": "heldout-coding-04",
+    "split": "heldout",
+    "specialty": "coding",
+    "direct": false,
+    "language": "es",
+    "prompt": "Añade un botón para alternar entre tema claro y oscuro."
+  },
+  {
+    "id": "heldout-coding-05",
+    "split": "heldout",
+    "specialty": "coding",
+    "direct": false,
+    "language": "es",
+    "prompt": "Implementa un contador con incremento y reinicio."
+  },
+  {
+    "id": "heldout-coding-06",
+    "split": "heldout",
+    "specialty": "coding",
+    "direct": false,
+    "language": "es",
+    "prompt": "Escribe una función para agrupar objetos por categoría."
+  },
+  {
+    "id": "heldout-coding-07",
+    "split": "heldout",
+    "specialty": "coding",
+    "direct": false,
+    "language": "es",
+    "prompt": "Crea un middleware que registre la duración de las peticiones."
+  },
+  {
+    "id": "heldout-coding-08",
+    "split": "heldout",
+    "specialty": "coding",
+    "direct": false,
+    "language": "es",
+    "prompt": "Genera una función que encuentre el máximo de una lista."
+  },
+  {
+    "id": "heldout-coding-09",
+    "split": "heldout",
+    "specialty": "coding",
+    "direct": false,
+    "language": "en",
+    "prompt": "Implement a bounded FIFO queue in JavaScript."
+  },
+  {
+    "id": "heldout-coding-10",
+    "split": "heldout",
+    "specialty": "coding",
+    "direct": false,
+    "language": "en",
+    "prompt": "Write a function to escape HTML special characters."
+  },
+  {
+    "id": "heldout-coding-11",
+    "split": "heldout",
+    "specialty": "coding",
+    "direct": false,
+    "language": "en",
+    "prompt": "Add a PATCH handler for updating a task title."
+  },
+  {
+    "id": "heldout-coding-12",
+    "split": "heldout",
+    "specialty": "coding",
+    "direct": false,
+    "language": "en",
+    "prompt": "Create a function that chunks an array into fixed sizes."
+  },
+  {
+    "id": "heldout-debugging-01",
+    "split": "heldout",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "es",
+    "prompt": "Este código multiplica en vez de sumar impuestos. Encuentra y corrige el fallo."
+  },
+  {
+    "id": "heldout-debugging-02",
+    "split": "heldout",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "es",
+    "prompt": "El servidor informa EADDRINUSE al arrancar. Ayúdame a diagnosticarlo."
+  },
+  {
+    "id": "heldout-debugging-03",
+    "split": "heldout",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "es",
+    "prompt": "Las llamadas devuelven 429 con un saludo; investiga el límite de tokens."
+  },
+  {
+    "id": "heldout-debugging-04",
+    "split": "heldout",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "es",
+    "prompt": "El orden de los resultados cambia al usar Promise.all. Encuentra la causa."
+  },
+  {
+    "id": "heldout-debugging-05",
+    "split": "heldout",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "es",
+    "prompt": "Mi caché devuelve valores caducados. Revisa por qué sucede y arréglalo."
+  },
+  {
+    "id": "heldout-debugging-06",
+    "split": "heldout",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "es",
+    "prompt": "El filtro acepta strings vacíos cuando debería rechazarlos. Corrígelo."
+  },
+  {
+    "id": "heldout-debugging-07",
+    "split": "heldout",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "es",
+    "prompt": "Hay un deadlock al adquirir dos bloqueos. Diagnostica y corrige."
+  },
+  {
+    "id": "heldout-debugging-08",
+    "split": "heldout",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "es",
+    "prompt": "La aplicación crece en memoria tras cada petición. Localiza la fuga."
+  },
+  {
+    "id": "heldout-debugging-09",
+    "split": "heldout",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "en",
+    "prompt": "Debug why a cancelled request still invokes its callback."
+  },
+  {
+    "id": "heldout-debugging-10",
+    "split": "heldout",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "en",
+    "prompt": "Fix this recursive function that never reaches its base case."
+  },
+  {
+    "id": "heldout-debugging-11",
+    "split": "heldout",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "en",
+    "prompt": "Investigate a timezone bug that shifts dates by one day."
+  },
+  {
+    "id": "heldout-debugging-12",
+    "split": "heldout",
+    "specialty": "debugging",
+    "direct": false,
+    "language": "en",
+    "prompt": "Repair a reducer that accidentally mutates previous state."
+  },
+  {
+    "id": "heldout-architecture-01",
+    "split": "heldout",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "es",
+    "prompt": "Diseña una estrategia de replicación para un servicio de métricas."
+  },
+  {
+    "id": "heldout-architecture-02",
+    "split": "heldout",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "es",
+    "prompt": "Define fronteras entre módulos de un gestor de proyectos."
+  },
+  {
+    "id": "heldout-architecture-03",
+    "split": "heldout",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "es",
+    "prompt": "Propón un esquema de eventos para sincronizar dos servicios."
+  },
+  {
+    "id": "heldout-architecture-04",
+    "split": "heldout",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "es",
+    "prompt": "Diseña el almacenamiento para un sistema de reservas."
+  },
+  {
+    "id": "heldout-architecture-05",
+    "split": "heldout",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "es",
+    "prompt": "Planea una migración gradual de monolito a servicios."
+  },
+  {
+    "id": "heldout-architecture-06",
+    "split": "heldout",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "es",
+    "prompt": "Decide cómo separar lectura y escritura en un sistema de reportes."
+  },
+  {
+    "id": "heldout-architecture-07",
+    "split": "heldout",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "es",
+    "prompt": "Diseña una API pública versionada con compatibilidad hacia atrás."
+  },
+  {
+    "id": "heldout-architecture-08",
+    "split": "heldout",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "es",
+    "prompt": "Propón arquitectura para procesar archivos grandes por partes."
+  },
+  {
+    "id": "heldout-architecture-09",
+    "split": "heldout",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "en",
+    "prompt": "Design a quota ledger shared by multiple model providers."
+  },
+  {
+    "id": "heldout-architecture-10",
+    "split": "heldout",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "en",
+    "prompt": "Plan a resumable workflow with durable checkpoints."
+  },
+  {
+    "id": "heldout-architecture-11",
+    "split": "heldout",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "en",
+    "prompt": "Design tenant isolation for a hosted gateway."
+  },
+  {
+    "id": "heldout-architecture-12",
+    "split": "heldout",
+    "specialty": "architecture",
+    "direct": false,
+    "language": "en",
+    "prompt": "Propose an architecture for a notification delivery service."
+  },
+  {
+    "id": "heldout-review-01",
+    "split": "heldout",
+    "specialty": "review",
+    "direct": false,
+    "language": "es",
+    "prompt": "Revisa los cambios de este PR y enumera defectos, sin corregirlos."
+  },
+  {
+    "id": "heldout-review-02",
+    "split": "heldout",
+    "specialty": "review",
+    "direct": false,
+    "language": "es",
+    "prompt": "Evalúa si este algoritmo conserva el orden de entrada."
+  },
+  {
+    "id": "heldout-review-03",
+    "split": "heldout",
+    "specialty": "review",
+    "direct": false,
+    "language": "es",
+    "prompt": "Audita esta consulta SQL para detectar inyección."
+  },
+  {
+    "id": "heldout-review-04",
+    "split": "heldout",
+    "specialty": "review",
+    "direct": false,
+    "language": "es",
+    "prompt": "Revisa el manejo de errores del adaptador HTTP."
+  },
+  {
+    "id": "heldout-review-05",
+    "split": "heldout",
+    "specialty": "review",
+    "direct": false,
+    "language": "es",
+    "prompt": "Inspecciona esta implementación de caché y señala riesgos de concurrencia."
+  },
+  {
+    "id": "heldout-review-06",
+    "split": "heldout",
+    "specialty": "review",
+    "direct": false,
+    "language": "es",
+    "prompt": "Evalúa la cobertura de estas pruebas unitarias."
+  },
+  {
+    "id": "heldout-review-07",
+    "split": "heldout",
+    "specialty": "review",
+    "direct": false,
+    "language": "es",
+    "prompt": "Revisa la migración SQLite antes de aplicarla."
+  },
+  {
+    "id": "heldout-review-08",
+    "split": "heldout",
+    "specialty": "review",
+    "direct": false,
+    "language": "es",
+    "prompt": "Analiza este contrato de API y detecta incompatibilidades."
+  },
+  {
+    "id": "heldout-review-09",
+    "split": "heldout",
+    "specialty": "review",
+    "direct": false,
+    "language": "en",
+    "prompt": "Review this cancellation patch without modifying it."
+  },
+  {
+    "id": "heldout-review-10",
+    "split": "heldout",
+    "specialty": "review",
+    "direct": false,
+    "language": "en",
+    "prompt": "Audit the code for accidental logging of credentials."
+  },
+  {
+    "id": "heldout-review-11",
+    "split": "heldout",
+    "specialty": "review",
+    "direct": false,
+    "language": "en",
+    "prompt": "Evaluate whether this fallback implementation duplicates side effects."
+  },
+  {
+    "id": "heldout-review-12",
+    "split": "heldout",
+    "specialty": "review",
+    "direct": false,
+    "language": "en",
+    "prompt": "Review these assertions for missing boundary cases."
+  }
+]

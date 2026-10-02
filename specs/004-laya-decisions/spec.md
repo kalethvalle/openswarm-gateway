@@ -1,7 +1,7 @@
 ---
 id: SPEC-004
-revision: 1
-status: in_progress
+revision: 2
+status: validated
 depends_on: [SPEC-002]
 tests: [test/decisions.test.ts]
 ---
@@ -17,3 +17,7 @@ tests: [test/decisions.test.ts]
 ## Alcance
 
 Instalación propia, una instancia, Node.js 22 y SQLite. Compatibilidad Chat Completions de texto/herramientas; sin aislamiento multiusuario ni API Responses.
+
+## Revisión 2
+
+En desarrollo, exigir simultáneamente especialidad y delivery aceptó 0/20 casos. El contrato inicial usa una única clasificación de especialidad: general selecciona respuesta directa; las demás habilitan colaboración. No cambia el umbral. Evaluación y producción comparten decisionInput.

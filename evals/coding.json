@@ -1,0 +1,574 @@
+[
+  {
+    "id": "sum",
+    "prompt": "Return the sum of an array of numbers.",
+    "cases": [
+      {
+        "input": [],
+        "expected": 0
+      },
+      {
+        "input": [
+          1,
+          2,
+          3
+        ],
+        "expected": 6
+      },
+      {
+        "input": [
+          -2,
+          3
+        ],
+        "expected": 1
+      }
+    ]
+  },
+  {
+    "id": "unique",
+    "prompt": "Remove duplicates from an array, preserving first occurrence order.",
+    "cases": [
+      {
+        "input": [
+          2,
+          1,
+          2
+        ],
+        "expected": [
+          2,
+          1
+        ]
+      },
+      {
+        "input": [],
+        "expected": []
+      },
+      {
+        "input": [
+          "a",
+          "a",
+          "b"
+        ],
+        "expected": [
+          "a",
+          "b"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "reverse",
+    "prompt": "Reverse a string by Unicode code points.",
+    "cases": [
+      {
+        "input": "abc",
+        "expected": "cba"
+      },
+      {
+        "input": "",
+        "expected": ""
+      },
+      {
+        "input": "a\ud83d\ude00",
+        "expected": "\ud83d\ude00a"
+      }
+    ]
+  },
+  {
+    "id": "title",
+    "prompt": "Return true only for strings with at least one non-whitespace character.",
+    "cases": [
+      {
+        "input": " hi ",
+        "expected": true
+      },
+      {
+        "input": "  ",
+        "expected": false
+      },
+      {
+        "input": null,
+        "expected": false
+      },
+      {
+        "input": 3,
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "max",
+    "prompt": "Return the largest number of an array, or null for an empty array.",
+    "cases": [
+      {
+        "input": [
+          1,
+          5,
+          -2
+        ],
+        "expected": 5
+      },
+      {
+        "input": [],
+        "expected": null
+      },
+      {
+        "input": [
+          -5,
+          -2
+        ],
+        "expected": -2
+      }
+    ]
+  },
+  {
+    "id": "count",
+    "prompt": "Count occurrences of each string in an array; return a plain object.",
+    "cases": [
+      {
+        "input": [
+          "a",
+          "b",
+          "a"
+        ],
+        "expected": {
+          "a": 2,
+          "b": 1
+        }
+      },
+      {
+        "input": [],
+        "expected": {}
+      },
+      {
+        "input": [
+          "constructor"
+        ],
+        "expected": {
+          "constructor": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": "clamp",
+    "prompt": "Given {value,min,max}, return value clamped to inclusive bounds.",
+    "cases": [
+      {
+        "input": {
+          "value": 10,
+          "min": 0,
+          "max": 5
+        },
+        "expected": 5
+      },
+      {
+        "input": {
+          "value": -2,
+          "min": 0,
+          "max": 5
+        },
+        "expected": 0
+      },
+      {
+        "input": {
+          "value": 3,
+          "min": 0,
+          "max": 5
+        },
+        "expected": 3
+      }
+    ]
+  },
+  {
+    "id": "chunk",
+    "prompt": "Given {items,size}, split items into arrays of size; return [] if size is not a positive integer.",
+    "cases": [
+      {
+        "input": {
+          "items": [
+            1,
+            2,
+            3
+          ],
+          "size": 2
+        },
+        "expected": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ]
+        ]
+      },
+      {
+        "input": {
+          "items": [],
+          "size": 2
+        },
+        "expected": []
+      },
+      {
+        "input": {
+          "items": [
+            1
+          ],
+          "size": 0
+        },
+        "expected": []
+      }
+    ]
+  },
+  {
+    "id": "even",
+    "prompt": "Return only the even integers from an array of numbers.",
+    "cases": [
+      {
+        "input": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "expected": [
+          2,
+          4
+        ]
+      },
+      {
+        "input": [
+          0,
+          -2,
+          1.5
+        ],
+        "expected": [
+          0,
+          -2
+        ]
+      },
+      {
+        "input": [],
+        "expected": []
+      }
+    ]
+  },
+  {
+    "id": "initials",
+    "prompt": "Return upper-case initials of whitespace-separated words in a string.",
+    "cases": [
+      {
+        "input": "Ada Lovelace",
+        "expected": "AL"
+      },
+      {
+        "input": "  alan  turing ",
+        "expected": "AT"
+      },
+      {
+        "input": "",
+        "expected": ""
+      }
+    ]
+  },
+  {
+    "id": "flatten",
+    "prompt": "Flatten an array exactly one level.",
+    "cases": [
+      {
+        "input": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ],
+          4
+        ],
+        "expected": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "input": [],
+        "expected": []
+      },
+      {
+        "input": [
+          [
+            [
+              1
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            1
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "median",
+    "prompt": "Return numeric median of a number array, or null if empty. Do not mutate input.",
+    "cases": [
+      {
+        "input": [
+          3,
+          1,
+          2
+        ],
+        "expected": 2
+      },
+      {
+        "input": [
+          4,
+          1,
+          2,
+          3
+        ],
+        "expected": 2.5
+      },
+      {
+        "input": [],
+        "expected": null
+      }
+    ]
+  },
+  {
+    "id": "intersection",
+    "prompt": "Given {a,b}, return their unique common elements in order of a.",
+    "cases": [
+      {
+        "input": {
+          "a": [
+            3,
+            2,
+            2,
+            1
+          ],
+          "b": [
+            1,
+            2
+          ]
+        },
+        "expected": [
+          2,
+          1
+        ]
+      },
+      {
+        "input": {
+          "a": [],
+          "b": [
+            1
+          ]
+        },
+        "expected": []
+      }
+    ]
+  },
+  {
+    "id": "factorial",
+    "prompt": "Compute factorial of an integer 0..15; return null outside that domain.",
+    "cases": [
+      {
+        "input": 0,
+        "expected": 1
+      },
+      {
+        "input": 5,
+        "expected": 120
+      },
+      {
+        "input": -1,
+        "expected": null
+      },
+      {
+        "input": 2.5,
+        "expected": null
+      }
+    ]
+  },
+  {
+    "id": "palindrome",
+    "prompt": "Return whether a string is a palindrome, ignoring ASCII case and non-alphanumeric characters.",
+    "cases": [
+      {
+        "input": "Race car",
+        "expected": true
+      },
+      {
+        "input": "hello",
+        "expected": false
+      },
+      {
+        "input": "",
+        "expected": true
+      }
+    ]
+  },
+  {
+    "id": "group",
+    "prompt": "Group objects by their category string; preserve order in each array.",
+    "cases": [
+      {
+        "input": [
+          {
+            "category": "x",
+            "v": 1
+          },
+          {
+            "category": "x",
+            "v": 2
+          }
+        ],
+        "expected": {
+          "x": [
+            {
+              "category": "x",
+              "v": 1
+            },
+            {
+              "category": "x",
+              "v": 2
+            }
+          ]
+        }
+      },
+      {
+        "input": [],
+        "expected": {}
+      }
+    ]
+  },
+  {
+    "id": "range",
+    "prompt": "Given {start,end}, return integers start through end exclusive; return [] when end <= start.",
+    "cases": [
+      {
+        "input": {
+          "start": 2,
+          "end": 5
+        },
+        "expected": [
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "input": {
+          "start": 3,
+          "end": 3
+        },
+        "expected": []
+      },
+      {
+        "input": {
+          "start": -2,
+          "end": 1
+        },
+        "expected": [
+          -2,
+          -1,
+          0
+        ]
+      }
+    ]
+  },
+  {
+    "id": "escape",
+    "prompt": "Escape &, <, >, double quote and single quote using &amp;, &lt;, &gt;, &quot;, &#39;.",
+    "cases": [
+      {
+        "input": "<a>",
+        "expected": "&lt;a&gt;"
+      },
+      {
+        "input": "a&b",
+        "expected": "a&amp;b"
+      },
+      {
+        "input": "\"'",
+        "expected": "&quot;&#39;"
+      }
+    ]
+  },
+  {
+    "id": "partition",
+    "prompt": "Given {items,pivot}, return [items less than pivot, remaining items], keeping order.",
+    "cases": [
+      {
+        "input": {
+          "items": [
+            3,
+            1,
+            2
+          ],
+          "pivot": 2
+        },
+        "expected": [
+          [
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ]
+      },
+      {
+        "input": {
+          "items": [],
+          "pivot": 0
+        },
+        "expected": [
+          [],
+          []
+        ]
+      }
+    ]
+  },
+  {
+    "id": "merge",
+    "prompt": "Given {a,b} sorted numeric arrays, merge preserving duplicates and numeric order.",
+    "cases": [
+      {
+        "input": {
+          "a": [
+            1,
+            3
+          ],
+          "b": [
+            2,
+            3
+          ]
+        },
+        "expected": [
+          1,
+          2,
+          3,
+          3
+        ]
+      },
+      {
+        "input": {
+          "a": [],
+          "b": [
+            -1
+          ]
+        },
+        "expected": [
+          -1
+        ]
+      }
+    ]
+  }
+]
