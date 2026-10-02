@@ -1,0 +1,8 @@
+node_modules
+.venv-laya
+dist
+.env
+data
+config.yaml
+.git
+test

@@ -1,0 +1,15 @@
+node_modules/
+.venv-laya/
+dist/
+.env
+data/
+config.yaml
+*.sqlite*
+coverage/
+.DS_Store
+config.*.backup.yaml
+config.openrouter.backup.yaml
+.env.*
+!.env.example
+*.log
+*.tsbuildinfo

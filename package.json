@@ -1,0 +1,37 @@
+{
+  "name": "openswarm-gateway",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "dev:laya": "node scripts/laya.mjs",
+    "eval:laya": "tsx scripts/laya-eval.ts",
+    "smoke:openclaw": "node scripts/openclaw-smoke.mjs",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/main.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.test.json",
+    "test": "tsx --test test/*.test.ts",
+    "smoke": "tsx scripts/smoke.ts"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "better-sqlite3": "^12.0.0",
+    "dotenv": "^16.4.7",
+    "eventsource-parser": "^3.0.0",
+    "fastify": "^5.12.5",
+    "js-tiktoken": "^1.0.21",
+    "yaml": "^2.7.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^22.13.0",
+    "openai": "^6.0.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  }
+}

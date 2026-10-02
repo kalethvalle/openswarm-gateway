@@ -1,0 +1,22 @@
+# Replace these example IDs with models available to your OpenRouter account.
+# Every fallback must also be declared below. Roles are generated per request.
+plannerModel: deepseek/deepseek-r1
+models:
+  - id: deepseek/deepseek-r1
+    specialties: [planning, architecture, reasoning]
+    fallbacks: [qwen/qwen-2.5-coder-32b-instruct]
+  - id: qwen/qwen-2.5-coder-32b-instruct
+    specialties: [coding, debugging]
+    fallbacks: [meta-llama/llama-3.3-70b-instruct]
+  - id: meta-llama/llama-3.3-70b-instruct
+    specialties: [review, synthesis, general]
+    fallbacks: []
+limits:
+  maxAgents: 6
+  maxToolRounds: 12
+  modelTimeoutMs: 120000
+  requestTimeoutMs: 300000
+  idleTtlMs: 86400000
+  maxOutputTokens: 4096
+  plannerOutputTokens: 4096
+  bodyLimitBytes: 2097152

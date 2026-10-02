@@ -1,0 +1,38 @@
+# Groq generation + local Laya routing (experimental, not calibrated).
+provider: groq
+plannerModel: openai/gpt-oss-20b
+models:
+  - id: openai/gpt-oss-20b
+    minIntervalMs: 0
+    specialties: [planning, general, synthesis]
+    fallbacks: [openai/gpt-oss-120b]
+  - id: qwen/qwen3.8-27b
+    minIntervalMs: 0
+    specialties: [coding, debugging]
+    fallbacks: [openai/gpt-oss-20b]
+  - id: openai/gpt-oss-120b
+    minIntervalMs: 0
+    specialties: [review, architecture, reasoning]
+    fallbacks: [openai/gpt-oss-20b]
+laya:
+  enabled: true
+  mode: route
+  baseUrl: http://127.0.0.1:8001
+  timeoutMs: 5000
+  minConfidence: 0.95
+  maxInputChars: 6000
+  generalModel: openai/gpt-oss-20b
+  codeModel: qwen/qwen3.8-27b
+  reviewModel: openai/gpt-oss-120b
+limits:
+  maxAgents: 2
+  maxToolRounds: 4
+  maxModelCalls: 8
+  rateLimitRetries: 1
+  maxRunTokens: 60000
+  modelTimeoutMs: 120000
+  requestTimeoutMs: 300000
+  idleTtlMs: 86400000
+  maxOutputTokens: 2048
+  plannerOutputTokens: 1024
+  bodyLimitBytes: 2097152

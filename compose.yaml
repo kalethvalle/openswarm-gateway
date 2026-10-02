@@ -1,0 +1,23 @@
+services:
+  gateway:
+    build: .
+    init: true
+    ports:
+      - "127.0.0.1:3000:3000"
+    env_file: .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: "3000"
+      CONFIG_PATH: /app/config.yaml
+      DATABASE_PATH: ${CONTAINER_DATABASE_PATH:-/app/data/openswarm-groq.sqlite}
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - swarm-data:/app/data
+    stop_grace_period: 15s
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/readyz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 120s
+volumes:
+  swarm-data:
